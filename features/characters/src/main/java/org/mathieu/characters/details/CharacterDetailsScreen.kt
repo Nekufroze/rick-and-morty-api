@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
+import org.mathieu.domain.models.location.LocationPreview
+import org.mathieu.location.LocationCard
 import org.mathieu.ui.composables.PreviewContent
 
 private typealias UIState = CharacterDetailsState
@@ -54,10 +56,12 @@ fun CharacterDetailsScreen(
     val state by viewModel.state.collectAsState()
 
     viewModel.init(characterId = id)
+    viewModel.setLocationPreview(locationId = state.locationID)
 
     CharacterDetailsContent(
         state = state,
-        onClickBack = navController::popBackStack
+        onClickBack = navController::popBackStack,
+        onClickLocation = { navController.navigate("location/${state.locationID}") }
     )
 
 }
@@ -67,7 +71,8 @@ fun CharacterDetailsScreen(
 @Composable
 private fun CharacterDetailsContent(
     state: UIState = UIState(),
-    onClickBack: () -> Unit = { }
+    onClickBack: () -> Unit = { },
+    onClickLocation: () -> Unit = { }
 ) = Scaffold(topBar = {
 
     Row(
@@ -94,9 +99,11 @@ private fun CharacterDetailsContent(
         )
     }
 }) { paddingValues ->
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(paddingValues), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues), contentAlignment = Alignment.Center
+    ) {
         AnimatedContent(targetState = state.error != null, label = "") {
             state.error?.let { error ->
                 Text(
@@ -156,17 +163,28 @@ private fun CharacterDetailsContent(
 
                     Text(text = state.name)
                 }
-
-
             }
+        }
+        state.locationPreview?.let {
+            LocationCard(
+                name = it.name,
+                type = it.type,
+//                onClick = { onLocationClick(it.id) }
+            )
         }
     }
 }
 
-
 @Preview
 @Composable
 private fun CharacterDetailsPreview() = PreviewContent {
-    CharacterDetailsContent()
+    CharacterDetailsContent(state = UIState(
+        name = "Rick Sanchez",
+        avatarUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+        locationPreview =
+            LocationPreview(2,"Citadel of Ricks", "Space station","")
+        )
+    )
+
 }
 

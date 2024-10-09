@@ -1,6 +1,8 @@
 package org.mathieu.data.remote.responses
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import org.mathieu.domain.models.location.LocationPreview
 
 /**
  * Represents detailed information about a character, typically received from an API response.
@@ -17,6 +19,7 @@ import kotlinx.serialization.Serializable
  * @property episode A list of episodes in which the character has appeared.
  * @property url The unique URL endpoint specifically for this character.
  * @property created The timestamp indicating when the character was added to the database.
+ * @property locationPreview A list of preview locations.
  */
 @Serializable
 internal data class CharacterResponse(
@@ -32,6 +35,8 @@ internal data class CharacterResponse(
     val episode: List<String>,
     val url: String,
     val created: String,
+    @Contextual val locationPreview: LocationPreview? = null
+
 )
 
 @Serializable

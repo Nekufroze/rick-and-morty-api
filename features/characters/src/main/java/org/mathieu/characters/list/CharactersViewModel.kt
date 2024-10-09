@@ -4,6 +4,7 @@ import android.app.Application
 import org.koin.core.component.inject
 import org.mathieu.domain.models.character.Character
 import org.mathieu.domain.repositories.CharacterRepository
+import org.mathieu.domain.repositories.LocationRepository
 import org.mathieu.ui.Destination
 import org.mathieu.ui.ViewModel
 
@@ -16,11 +17,12 @@ class CharactersViewModel(application: Application) : ViewModel<CharactersState>
     CharactersState(), application) {
 
     private val characterRepository: CharacterRepository by inject()
+    private val locationRepository: LocationRepository by inject()
 
     init {
 
         collectData(
-            source = { characterRepository.getCharacters() }
+            source = { characterRepository.getCharacters()}
         ) {
 
             onSuccess {
@@ -34,7 +36,19 @@ class CharactersViewModel(application: Application) : ViewModel<CharactersState>
             updateState { copy(isLoading = false) }
         }
 
+//        setLocationPreview(characters = state.value.characters)
+
     }
+
+//    private fun setLocationPreview(characters: List<Character>) {
+//        viewModelScope.launch {
+//            characters.forEach { character ->
+//                val locationPreview = locationRepository.getLocationPreview(character.location.second)
+//                character.locationPreview = locationPreview
+//            }
+//            updateState { copy(characters = characters) }
+//        }
+//    }
 
     fun handleAction(action: CharactersAction) {
         when(action) {

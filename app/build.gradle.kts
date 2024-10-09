@@ -74,4 +74,6 @@ dependencies {
     //Koin
     implementation("io.insert-koin:koin-android:$koinVersion")
 
+    implementation ("androidx.compose.ui:ui-tooling:1.0.5")
+
 }

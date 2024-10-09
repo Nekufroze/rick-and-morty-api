@@ -25,4 +25,7 @@ interface CharacterRepository {
      * @return Details of the specified character.
      */
     suspend fun getCharacter(id: Int): Character
+
+
+
 }

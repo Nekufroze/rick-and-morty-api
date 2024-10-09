@@ -122,7 +122,7 @@ private fun CharactersContent(
 }
 
 @Composable
-private fun CharacterCard(
+fun CharacterCard(
     modifier: Modifier, character: Character
 ) =
     Row(
