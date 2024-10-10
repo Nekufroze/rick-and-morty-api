@@ -24,8 +24,8 @@ class LocationDetailsViewModel(
     fun init(locationId: Int) {
         viewModelScope.launch {
             val location = locationRepository.getLocations(locationId)
-            val characters = locationRepository.getCharactersByLocationId(locationId)
-            _state.value = LocationDetailsState(location = location, characters = characters)
+            //val characters = locationRepository.getCharactersByLocationId(locationId)
+           // _state.value = LocationDetailsState(location = location, characters = characters)
         }
     }
 }
