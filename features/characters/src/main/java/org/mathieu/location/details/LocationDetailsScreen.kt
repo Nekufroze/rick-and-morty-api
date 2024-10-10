@@ -16,7 +16,9 @@ import androidx.navigation.NavController
 import org.mathieu.characters.list.CharacterCard
 import org.mathieu.location.LocationCard
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+private typealias UIState = LocationDetailsViewModel.LocationDetailsState
+
 @Composable
 fun LocationDetailsScreen(
     navController: NavController,
@@ -26,6 +28,21 @@ fun LocationDetailsScreen(
     val state by viewModel.state.collectAsState()
 
     viewModel.init(locationId = locationId)
+
+    LocationDetailsContent(
+        state = state,
+        navController = navController
+    )
+
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LocationDetailsContent(
+    state: UIState,
+    navController: NavController
+) {
 
     Scaffold { paddingValues ->
         Column(

@@ -1,6 +1,7 @@
 package org.mathieu.domain.repositories
 
 import kotlinx.coroutines.flow.Flow
+import org.mathieu.domain.models.character.Character
 import org.mathieu.domain.models.location.Location
 import org.mathieu.domain.models.location.LocationPreview
 
@@ -35,6 +36,6 @@ interface LocationRepository {
      * @param locationId The unique identifier of the Location.
      * @return A list of Characters associated with the specified Location.
      */
-//    suspend fun getCharactersByLocationId(locationId: Int): List<Character>
+    suspend fun getCharactersByLocationId(locationId: Int): List<Character>
 
 }

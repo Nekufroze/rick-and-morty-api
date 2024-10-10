@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -13,8 +14,10 @@ import org.mathieu.data.local.objects.LocationObject
 import org.mathieu.data.local.objects.toLocationPreview
 import org.mathieu.data.local.objects.toModel
 import org.mathieu.data.local.objects.toRealmObject
+import org.mathieu.data.remote.CharacterApi
 import org.mathieu.data.remote.LocationApi
 import org.mathieu.data.remote.responses.LocationResponse
+import org.mathieu.domain.models.character.Character
 import org.mathieu.domain.models.location.Location
 import org.mathieu.domain.models.location.LocationPreview
 import org.mathieu.domain.repositories.LocationRepository
@@ -29,6 +32,7 @@ private val Context.dataStore by preferencesDataStore(
 internal class LocationRepositoryImpl(
     private val context: Context,
     private val locationApi: LocationApi,
+    private val characterApi: CharacterApi,
     private val locationLocal: LocationLocal
 ) : LocationRepository {
     override suspend fun getLocations(): Flow<List<Location>> =
@@ -99,12 +103,20 @@ internal class LocationRepositoryImpl(
             ?: throw Exception("Location not found")
     }
 
-//    override suspend fun getCharactersByLocationId(locationId: Int): List<Character> = coroutineScope {
-//        val location = async { getLocations(locationId) }
-//        val characters = async { locationApi.getLocations(locationId).residents.map { url -> characterApi.getCharacterByUrl(url) } }
-//        characters.await().map(CharacterResponse::toRealmObject).also { characterLocal.saveCharacters(it) }
-//        location.await().residents.map { url -> characterLocal.getCharacterByUrl(url)!!.toModel() }
-//    }
+    override suspend fun getCharactersByLocationId(locationId: Int): List<Character> = coroutineScope {
+        val location = getLocations(locationId)
+        val charactersID = location.residents.map { it.toString().split("/").last().toInt() }
+
+        charactersID.map { id ->
+            async {
+                characterApi.getCharacter(id)?.toRealmObject()?.toModel()
+            }
+        }.map { it.await() }
+
+        (location.residents)
+
+
+    }
 }
 
 

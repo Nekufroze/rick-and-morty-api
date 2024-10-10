@@ -22,9 +22,10 @@ sealed class Destination(val route: String, val arguments: List<NamedNavArgument
         )
 
     object Locations: Destination(route = "locations")
+
     class LocationDetails(locationId: String = "{locationId}"):
         Destination(
-            route = "locationDetail/$locationId",
+            route = "location/$locationId",
             arguments = listOf(navArgument("locationId") { type = NavType.IntType })
         )
 }

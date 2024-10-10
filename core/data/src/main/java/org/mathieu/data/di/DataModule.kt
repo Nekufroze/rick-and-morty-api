@@ -40,6 +40,7 @@ val dataModule = module {
         LocationRepositoryImpl(
             get(),
             get(),
+            get(),
             get()
         )
     }

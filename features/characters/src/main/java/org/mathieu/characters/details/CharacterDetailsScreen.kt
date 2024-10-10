@@ -61,9 +61,10 @@ fun CharacterDetailsScreen(
     CharacterDetailsContent(
         state = state,
         onClickBack = navController::popBackStack,
-        onClickLocation = { navController.navigate("location/${state.locationID}") }
+        onClickLocation = { locationId ->
+            navController.navigate("location/$locationId")
+        }
     )
-
 }
 
 
@@ -72,7 +73,7 @@ fun CharacterDetailsScreen(
 private fun CharacterDetailsContent(
     state: UIState = UIState(),
     onClickBack: () -> Unit = { },
-    onClickLocation: () -> Unit = { }
+    onClickLocation: (Int) -> Unit = { }
 ) = Scaffold(topBar = {
 
     Row(
@@ -169,7 +170,7 @@ private fun CharacterDetailsContent(
             LocationCard(
                 name = it.name,
                 type = it.type,
-//                onClick = { onLocationClick(it.id) }
+                onClick = { onClickLocation(it.id) }
             )
         }
     }

@@ -54,6 +54,14 @@ private fun MainContent() {
             )
 
         }
+        composable(
+            destination = org.mathieu.ui.Destination.LocationDetails()
+        ) { backStackEntry ->
+            org.mathieu.location.details.LocationDetailsScreen(
+                navController = navController,
+                locationId = backStackEntry.arguments?.getInt("locationId") ?: -1
+            )
+        }
 
     }
 
